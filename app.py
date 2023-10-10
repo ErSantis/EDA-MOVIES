@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from tvshows import  donut, sunburst,bar
+from tvshows import  donut, sunburst,bar,plot_map
 
 app = dash.Dash(__name__)
 
@@ -55,8 +55,25 @@ app.layout = html.Div([
     ], style={'grid-row': '2 / 3', 'grid-column': '1 / 2'}),
     
     # Cuarto cuadrante (abajo a la derecha)
-    html.Div(id='resultado', style={'grid-row': '2 / 3', 'grid-column': '2 / 3'})
+    html.Div([
+
+        html.H2("Tittle"),
+        dcc.Dropdown(
+            id='dropdown3',
+            options=['Netflix','Prime Video', 'HBO','Disney+'],
+            value='Netflix',
+            style={'width': '100%'}
+        ),
+
+        dcc.Graph(
+            id='map-graph',
+            style={'width': '100%', 'height': '50vh'}
+        )
+    ], style={'grid-row': '2 / 3', 'grid-column': '2 / 3'})
+
+
 ], style={'display': 'grid', 'grid-template-rows': '1fr 1fr', 'grid-template-columns': '1fr 1fr', 'gap': '10px'})
+
 @app.callback(
     Output('bar-graph', 'figure'),
     Input('dropdown', 'value')
@@ -70,6 +87,13 @@ def actualizar_grafico(value):
 )
 def actualizar_grafico2(value):
     return bar(value)
+
+@app.callback(
+    Output('map-graph', 'figure'),
+    Input('dropdown3', 'value')
+)
+def actualizar_grafico2(value):
+    return plot_map(value)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

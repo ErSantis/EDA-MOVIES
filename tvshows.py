@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pyodbc
 import plotly.express as px
 from sklearn.preprocessing import MinMaxScaler
+import pycountry
 
 
 # ### Connect to Database
@@ -198,7 +199,50 @@ def bar(value):
 
     return fig
 
+def map(value):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT D.id , D.origin_country, D.vote_count FROM data2 as D WHERE D.networks like" + f'\'%{value}%\' and D.origin_country is not null')
+        rows= cursor.fetchall()
+        return rows
+    except Exception as ex:
+        print(ex)
 
-# In[55]:
+def create_df_map(value):
+    df = pd.DataFrame()
+    net = map(value)
+    df['name'] = [item[0] for item in net]
+    df['country'] = [item[1] for item in net]
+    df['votes'] = [item[2] for item in net]
+    df_expand = df.assign(country=df['country'].str.split(',')).explode('country')
+    df_country_rating = df_expand.groupby('country')['votes'].mean().reset_index()
+    return df_country_rating
 
+def create_df_map(value):
+    df = pd.DataFrame()
+    net = map(value)
+    df['name'] = [item[0] for item in net]
+    df['country'] = [item[1] for item in net]
+    df['votes'] = [item[2] for item in net]
+    df_expand = df.assign(country=df['country'].str.split(',')).explode('country')
+    df_country_rating = df_expand.groupby('country')['votes'].mean().reset_index()
+    return df_country_rating
+
+def get_country_name(alpha_2):
+    try:
+        country = pycountry.countries.get(alpha_2=alpha_2.strip())
+        if country:
+            return country.name
+        else:
+            return None
+    except Exception as e:
+        return None
+
+def plot_map(value):
+    df_country_rating = create_df_map(value)
+    df_country_rating['country'] = df_country_rating['country'].apply(get_country_name)
+    fig = px.scatter_geo(df_country_rating, locations='country', locationmode='country names', color='votes',
+                        title=f'Average Rating by Country for {value} Shows', scope='world',size='votes')
+
+    return fig    
 

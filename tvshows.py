@@ -8,7 +8,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pyodbc
 import plotly.express as px
-from sklearn.preprocessing import MinMaxScaler
 import pycountry
 
 
@@ -18,7 +17,7 @@ import pycountry
 
 
 try:
-    connection = pyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-FMPUJNUK\SQLEXPRESS;DATABASE=Prueba;UID=sa;PWD=123456')
+    connection = pyodbc.connect('DRIVER={SQL Server};SERVER=JOHANPC\SQLEXPRESS;DATABASE=Movies;UID=sa;PWD=johan123')
     print('Conexion exitosa')
 except Exception as ex:
     print(ex)
@@ -32,7 +31,7 @@ except Exception as ex:
 def values_count(value):
     try:
         cursor = connection.cursor()
-        cursor.execute(("SELECT Count(*) FROM data2 as D WHERE D.networks like" + f'\'%{value}%\''))
+        cursor.execute(("SELECT Count(*) FROM movies as D WHERE D.networks like" + f'\'%{value}%\''))
         rows= cursor.fetchall()
         return rows[0][0]
     except Exception as ex:
@@ -43,8 +42,8 @@ def values_count(value):
 
 
 def donut():
-    labels = ['Netflix', 'Prime video', 'HBO', 'Disney+']
-    colors = ["#ff6b6b", "#95d5b2", "#a2d2ff", "#72efdd"]
+    labels = ['Netflix', 'Prime video', 'HBO', 'Disney+','BBC One', 'YouTube']
+    colors = ["#ff6b6b", "#95d5b2", "#6C15B9", "#72efdd","#003880", "#D8047E"]
     sizes = []
     for net in labels:
         sizes.append(values_count(net))
@@ -69,7 +68,7 @@ def donut():
 def vote_count(value):
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT D.name ,D.genres, D.vote_count FROM data2 as D WHERE D.networks like" + f'\'%{value}%\' and D.vote_count !=0 order by D.vote_count DESC')
+        cursor.execute("SELECT D.name ,D.genres, D.vote_count FROM movies as D WHERE D.networks like" + f'\'%{value}%\' and D.vote_count !=0 order by D.vote_count DESC')
         rows= cursor.fetchall()
         return rows
     except Exception as ex:
@@ -85,7 +84,7 @@ def sunburst(net):
     c = net
     df = pd.DataFrame()
     net = vote_count(net)
-    x = {'Netflix':'amp','Prime Video':'blugrn','HBO':'haline','Disney+':'dense'}
+    x = {'Netflix': 'amp', 'Prime Video': 'blugrn', 'HBO': 'haline', 'Disney+': 'dense', 'BBC One': 'coral', 'YouTube': 'teal'}
     df['name'] = [item[0] for item in net]
     df['genres'] = [item[1] for item in net]
     df['Votes'] = [item[2] for item in net]
@@ -143,7 +142,7 @@ def rename(df):
 def lan_count(value):
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT D.name ,D.languages FROM data2 as D WHERE D.networks like" + f'\'%{value}%\' and D.languages is not null')
+        cursor.execute("SELECT D.name ,D.languages FROM movies as D WHERE D.networks like" + f'\'%{value}%\' and D.languages is not null')
         rows= cursor.fetchall()
         return rows
     except Exception as ex:
@@ -194,7 +193,9 @@ def bar(value):
     c = {'Netflix':'#ff6b6b',
          'Prime Video':'#00A8E1',
         'HBO':'#800080',
-        'Disney+':'#72efdd'}
+        'Disney+':'#72efdd',
+        'BBC One':'#003880',    
+        'YouTube':'#D8047E'}
     fig.update_traces(marker_color=c[value])
 
     return fig
@@ -202,7 +203,7 @@ def bar(value):
 def map(value):
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT D.id , D.origin_country, D.vote_count FROM data2 as D WHERE D.networks like" + f'\'%{value}%\' and D.origin_country is not null')
+        cursor.execute("SELECT D.id , D.origin_country, D.vote_count FROM movies as D WHERE D.networks like" + f'\'%{value}%\' and D.origin_country is not null')
         rows= cursor.fetchall()
         return rows
     except Exception as ex:

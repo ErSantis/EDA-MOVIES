@@ -2,78 +2,81 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from tvshows import  donut, sunburst,bar,plot_map
+from tvshows import donut, sunburst, bar, plot_map
 
+# Crear la aplicación Dash
 app = dash.Dash(__name__)
 
+# Estilos de CSS con una paleta de colores oscuros diferentes
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+# Aplicar los estilos CSS
+app.css.append_css({"external_url": external_stylesheets})
+
+# Estilo global de la página
 app.layout = html.Div([
-    
-    html.Div(
-        html.H1("EDA TV SHOWS"),
-        style={'text-align': 'center'}
-    ),    
-    
-    html.Hr(),
-    # Primer cuadrante (arriba a la izquierda)
+    # Encabezado
     html.Div([
-        html.H2("Distribution of tv shows on the plattforms"),
-        dcc.Graph(
-            id='donut-graph',
-            figure=donut(),
-            style={'width': '100%', 'height': '50vh'}
-        )
-    ], style={'grid-row': '1 / 2', 'grid-column': '1 / 2'}),
-    
-    # Segundo cuadrante (arriba a la derecha)
+        html.H1("EDA TV SHOWS AND SERIES", style={'textAlign': 'center', 'color': 'white'}),
+    ], style={'backgroundColor': '#1C2833', 'padding': '20px'}),
+
+    # Fila 1: Gráfico de género de los 10 mejores programas de televisión
     html.Div([
-        html.H2("Genre of the top 10 stv shows "),
+        html.H2("Genre of the top 10 TV Shows", style={'color': 'white'}),
         dcc.Dropdown(
             id='dropdown',
-            options=['Netflix','Prime Video', 'HBO','Disney+'],
+            options=[{'label': platform, 'value': platform} for platform in ['Netflix', 'Prime Video', 'HBO', 'Disney+', 'BBC One', 'YouTube']],
             value='Netflix',
             style={'width': '100%'}
         ),
         dcc.Graph(
             id='bar-graph',
-            style={'width': '100%', 'height': '50vh'}
+            style={'width': '100%'}
         )
-    ], style={'grid-row': '1 / 2', 'grid-column': '2 / 3'}),
-    
-    # Tercer cuadrante (abajo a la izquierda)
+    ], style={'backgroundColor': '#39424E', 'padding': '20px', 'border-radius': '5px'}),
+
+    # Fila 2: Gráfico de distribución de programas en plataformas
     html.Div([
-        html.H2("Language of tv shows"),
+        html.H2("Distribution of TV Shows on Platforms", style={'color': 'white'}),
+        dcc.Graph(
+            id='donut-graph',
+            figure=donut(),
+            style={'width': '100%'}
+        )
+    ], style={'backgroundColor': '#1F4068', 'padding': '20px', 'border-radius': '5px'}),
+
+    # Fila 3: Gráfico de idioma de programas de televisión
+    html.Div([
+        html.H2("Language of TV Shows", style={'color': 'white'}),
         dcc.Dropdown(
             id='dropdown2',
-            options=['Netflix','Prime Video', 'HBO','Disney+'],
+            options=[{'label': platform, 'value': platform} for platform in ['Netflix', 'Prime Video', 'HBO', 'Disney+', 'BBC One', 'YouTube']],
             value='Netflix',
             style={'width': '100%'}
         ),
         dcc.Graph(
             id='graph2',
-            style={'width': '100%', 'height': '50vh'}
+            style={'width': '100%'}
         )
-    ], style={'grid-row': '2 / 3', 'grid-column': '1 / 2'}),
-    
-    # Cuarto cuadrante (abajo a la derecha)
-    html.Div([
+    ], style={'backgroundColor': '#485460', 'padding': '20px', 'border-radius': '5px'}),
 
-        html.H2("Tittle"),
+    # Fila 4: Mapa de calificación por país
+    html.Div([
+        html.H2("Rating Map by Country", style={'color': 'white'}),
         dcc.Dropdown(
             id='dropdown3',
-            options=['Netflix','Prime Video', 'HBO','Disney+'],
+            options=[{'label': platform, 'value': platform} for platform in ['Netflix', 'Prime Video', 'HBO', 'Disney+', 'BBC One', 'YouTube']],
             value='Netflix',
             style={'width': '100%'}
         ),
-
         dcc.Graph(
             id='map-graph',
-            style={'width': '100%', 'height': '50vh'}
+            style={'width': '100%'}
         )
-    ], style={'grid-row': '2 / 3', 'grid-column': '2 / 3'})
+    ], style={'backgroundColor': '#293241', 'padding': '20px', 'border-radius': '5px'}),
+])
 
-
-], style={'display': 'grid', 'grid-template-rows': '1fr 1fr', 'grid-template-columns': '1fr 1fr', 'gap': '10px'})
-
+# Definir funciones de devolución de llamada
 @app.callback(
     Output('bar-graph', 'figure'),
     Input('dropdown', 'value')
@@ -92,7 +95,7 @@ def actualizar_grafico2(value):
     Output('map-graph', 'figure'),
     Input('dropdown3', 'value')
 )
-def actualizar_grafico2(value):
+def actualizar_grafico3(value):
     return plot_map(value)
 
 if __name__ == '__main__':

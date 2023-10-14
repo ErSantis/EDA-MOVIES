@@ -4,56 +4,61 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from tvshows import donut, sunburst, bar, plot_map
 
-# Crear la aplicación Dash
+external_stylesheets = [
+    "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+]
+
 app = dash.Dash(__name__)
 
-# Estilos de CSS con una paleta de colores diferentes
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 # Aplicar los estilos CSS
-app.css.append_css({"external_url": external_stylesheets})
+app.css.append_css({
+    'external_url': 'url("assets/styles.css")'
+})
 
-# Estilo global de la página
+app.title = 'EDA: TV SHOWS AND SERIES'
+
+# Estilos CSS para los divs
+div_style = {
+    'display': 'inline-block',
+    'vertical-align': 'top',
+    'width': 'calc(50% - 10px)',  # 50% de ancho con 10px de espacio entre los divs
+    'margin-right': '10px',
+    'margin-bottom': '10px',
+    'box-sizing': 'border-box'
+}
+
 app.layout = html.Div([
-    # Encabezado
     html.Div([
-        html.H1("EDA TV SHOWS AND SERIES", style={'textAlign': 'center', 'color': 'white'}),
-    ], style={'backgroundColor': '#1C2833', 'padding': '20px'}),
+        html.H1("EDA TV SHOWS AND SERIES", className='custom-font', style={'textAlign': 'center', 'color': 'white'}),
+    ], style={'backgroundColor': '#1f8983', 'padding': '20px'}),
 
-    # Fila 1: Gráfico de género de los programas de televisión principales
+    # Div para la gráfica de género de TV Shows
     html.Div([
         html.H2("Genre of the top TV Shows", style={'color': 'white'}),
-        html.Label("Seleccione el top que desea ver", style={'color': 'white', 'padding': '5px'}),
-        dcc.RadioItems(
-            id='top-selection',
-            options=[
-                {'label': 'Mejor', 'value': 'best'},
-                {'label': 'Peor', 'value': 'worst'}
-            ],
-            value='best',
-            labelStyle={'display': 'inline-block', 'padding': '5px'}
-        ),
-        dcc.RangeSlider(
-            id='top-n-slider',
-            min=1,
-            max=10,
-            step=1,
-            value=[1, 10],
-            marks={i: str(i) for i in range(1, 11)},
-        ),
+        html.Div([
+            html.Label("Seleccione el top que desea ver", style={'color': 'white', 'padding': '5px'}),
+            dcc.Input(
+                id='top-n-dropdown',
+                type='number',
+                min=1,
+                max=10,
+                value=1,
+                style={'width': '69px', 'margin-left': '10px'}
+            )
+        ], style={'display': 'flex', 'align-items': 'center'}),
         dcc.Dropdown(
             id='dropdown',
             options=[{'label': platform, 'value': platform} for platform in ['Netflix', 'Prime Video', 'HBO', 'Disney+', 'BBC One', 'YouTube']],
             value='Netflix',
-            style={'width': '100%'}
+            style={'width': '110px'}
         ),
         dcc.Graph(
             id='bar-graph',
-            style={'width': '100%'}
+            style={'width': '150%'}
         )
-    ], style={'backgroundColor': '#39424E', 'padding': '20px', 'border-radius': '5px'}),
-    
-    # Fila 2: Gráfico de distribución de programas en plataformas
+    ], style={**div_style, 'backgroundColor': '#56bbb4', 'border-radius': '5px'}),
+
+    # Div para la gráfica de distribución de TV Shows en plataformas
     html.Div([
         html.H2("Distribution of TV Shows on Platforms", style={'color': 'white'}),
         dcc.Graph(
@@ -61,9 +66,9 @@ app.layout = html.Div([
             figure=donut(),
             style={'width': '100%'}
         )
-    ], style={'backgroundColor': '#1F4068', 'padding': '20px', 'border-radius': '5px'}),
+    ], style={**div_style, 'backgroundColor': '#56bbb4', 'border-radius': '5px'}),
 
-    # Fila 3: Gráfico de idioma de programas de televisión
+    # Div para la gráfica de idioma de TV Shows
     html.Div([
         html.H2("Language of TV Shows", style={'color': 'white'}),
         dcc.Dropdown(
@@ -76,9 +81,9 @@ app.layout = html.Div([
             id='graph2',
             style={'width': '100%'}
         )
-    ], style={'backgroundColor': '#485460', 'padding': '20px', 'border-radius': '5px'}),
+    ], style={**div_style, 'backgroundColor': '#72d3cc', 'border-radius': '5px'}),
 
-    # Fila 4: Mapa de calificación por país
+    # Div para la gráfica de rating por país
     html.Div([
         html.H2("Rating Map by Country", style={'color': 'white'}),
         dcc.Dropdown(
@@ -91,18 +96,40 @@ app.layout = html.Div([
             id='map-graph',
             style={'width': '100%'}
         )
-    ], style={'backgroundColor': '#293241', 'padding': '20px', 'border-radius': '5px'}),
+    ], style={**div_style, 'backgroundColor': '#8dece4', 'border-radius': '5px'}),
+
+    html.Hr(),
+
+    # Footer
+    html.Footer([
+        html.Div([
+            html.Img(src='/assets/dash-logo-new.png', alt='Imagen 1', style={'width': '130px', 'height': 'auto'}),
+            html.Img(src='/assets/plotly_logo.png', alt='Imagen 2', style={'width': '130px', 'height': 'auto'})
+        ], style={'float': 'left', 'width': '150px'}),
+
+        html.Div([
+            html.P("© 2023 Linero, Santis y Vergara. Todos los derechos reservados."),
+            html.P("Base de datos recuperada de Kaggle: ", style={'display': 'inline'}),
+            dcc.Link("Clic Aquí", href='https://www.kaggle.com/datasets/asaniczka/full-tmdb-tv-shows-dataset-2023-150k-shows', style={'text-decoration': 'underline', 'color': 'blue'})
+        ], style={'text-align': 'center'}),
+
+        html.Div([
+            html.P("Enlace al repositorio:", style={'text-align': 'center'}),
+            html.A(
+                html.Img(src='/assets/GitHub-Emblem.png', alt='Enlace al repositorio de GitHub', style={'width': '130px', 'height': 'auto'}),
+                href='https://github.com/ErSantis/EDA-MOVIES'
+            )
+        ], style={'float': 'right'})
+    ])
 ])
 
-# Definir funciones de devolución de llamada
 @app.callback(
     Output('bar-graph', 'figure'),
-    Input('dropdown', 'value'),
-    Input('top-n-slider', 'value'),
-    Input('top-selection', 'value')
+    Input('top-n-dropdown', 'value'),
+    Input('dropdown', 'value')
 )
-def actualizar_grafico(selected_platform, top_n, top_selection):
-    return sunburst(selected_platform, top_n, top_selection)
+def actualizar_grafico(valor_n_dropdown, valor_dropdown):
+    return sunburst(valor_n_dropdown, valor_dropdown)
 
 @app.callback(
     Output('graph2', 'figure'),

@@ -1,0 +1,33 @@
+/* Importa la fuente Kanit de Google Fonts */
+@font-face {
+    font-family: 'Kanit';
+    src: url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+    /* Opcionalmente, puedes especificar otros atributos como 'font-weight' y 'font-style' si es necesario. */
+}
+
+/* Estilo para el título con la fuente personalizada Kanit */
+.custom-font {
+    font-family: 'Kanit', sans-serif;
+    font-size: 24px;
+    color: #691616;
+}
+
+/* Estilo para el párrafo con la fuente personalizada Kanit */
+.custom-paragraph {
+    font-family: 'Kanit', sans-serif;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Estilo para un enlace con la fuente personalizada Kanit */
+.custom-link {
+    font-family: 'Kanit', sans-serif;
+    font-size: 14px;
+    color: #0077CC;
+    text-decoration: none; /* Quita la subraya enlaces */
+}
+
+/* Estilo para un enlace al pasar el ratón sobre él */
+.custom-link:hover {
+    color: #005599;
+}

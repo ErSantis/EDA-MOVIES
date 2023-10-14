@@ -17,7 +17,7 @@ import pycountry
 
 
 try:
-    connection = pyodbc.connect('DRIVER={SQL Server};SERVER=JOHANPC\SQLEXPRESS;DATABASE=Movies;UID=sa;PWD=johan123')
+    connection = pyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-FMPUJNUK\SQLEXPRESS;DATABASE=Movies;UID=sa;PWD=123456')
     print('Conexion exitosa')
 except Exception as ex:
     print(ex)
@@ -66,6 +66,7 @@ def donut():
 
 
 def vote_count(value):
+    
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT D.name ,D.genres, D.vote_count FROM movies as D WHERE D.networks like" + f'\'%{value}%\' and D.vote_count !=0 order by D.vote_count DESC')
@@ -79,8 +80,7 @@ def vote_count(value):
 # In[9]:
 
 
-def sunburst(net):
-    
+def sunburst(val1, net):
     c = net
     df = pd.DataFrame()
     net = vote_count(net)
@@ -88,14 +88,17 @@ def sunburst(net):
     df['name'] = [item[0] for item in net]
     df['genres'] = [item[1] for item in net]
     df['Votes'] = [item[2] for item in net]
+    min_vote_count = df['Votes'].min()
+    max_vote_count = df['Votes'].max()
+    df['votes_average'] = 10 * (df['Votes'] - min_vote_count) / (max_vote_count - min_vote_count)
     fig =px.sunburst(
-    df[0:10],
+    df[0:val1],
     path=['name','genres'],
-    values='Votes',
-    color='Votes',
+    values='votes_average',
+    color='votes_average',
     color_continuous_scale=x[c],
     width=800,
-    height=800)
+    height=500)
     return fig
 
 

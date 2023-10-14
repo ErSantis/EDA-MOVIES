@@ -42,20 +42,23 @@ def values_count(value):
 
 
 def donut():
-    labels = ['Netflix', 'Prime video', 'HBO', 'Disney+','BBC One', 'YouTube']
-    colors = ["#ff6b6b", "#95d5b2", "#6C15B9", "#72efdd","#003880", "#D8047E"]
+    labels = ['Netflix', 'Prime video', 'HBO', 'Disney+','BBC One', 'YouTube','NBC','FOX','Discovery','MTV']
+    colors = ["#ff6b6b", "#EDE603", "#6C15B9", "#72efdd","#003880", "#D8047E","#DC3A0E","#0E1EDC","#0EDC30","#0E94DC"]
     sizes = []
     for net in labels:
         sizes.append(values_count(net))
     fig =  px.pie(
         values=sizes,
         names=labels,
-        title='TV SHOWS',
         hole=0.5,
         color_discrete_sequence=colors,
         labels={'names': 'Streaming Service'}
     )
-
+    fig.update_layout(
+        paper_bgcolor='#ffffff',
+        height=862
+        #height=740  # Cambia el fondo a azul
+    )
     fig.update_traces(textinfo='percent+label')
     return fig
 
@@ -84,7 +87,7 @@ def sunburst(val1, net):
     c = net
     df = pd.DataFrame()
     net = vote_count(net)
-    x = {'Netflix': 'amp', 'Prime Video': 'blugrn', 'HBO': 'haline', 'Disney+': 'dense', 'BBC One': 'coral', 'YouTube': 'teal'}
+    x = {'Netflix': 'amp', 'Prime Video': 'blugrn', 'HBO': 'haline', 'Disney+': 'dense', 'BBC One': 'amp', 'YouTube': 'teal'}
     df['name'] = [item[0] for item in net]
     df['genres'] = [item[1] for item in net]
     df['Votes'] = [item[2] for item in net]
@@ -97,8 +100,16 @@ def sunburst(val1, net):
     values='votes_average',
     color='votes_average',
     color_continuous_scale=x[c],
-    width=800,
-    height=500)
+    )
+    fig.update_layout(
+        paper_bgcolor='#ffffff',
+        height=770,
+        title_font=dict(family='Arial', size=18)
+    )
+     # Configura el rango inicial de zoom
+    fig.update_xaxes(range=[0, 1])  # Ajusta el rango del eje X
+    fig.update_yaxes(range=[0, 1])  # Ajusta el rango del eje Y
+
     return fig
 
 
@@ -250,3 +261,23 @@ def plot_map(value):
 
     return fig    
 
+def get(value):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT m.status, COUNT(*) Cant FROM movies as m WHERE m.networks like" + f'\'%{value}%\'  group by m.status')
+        rows= cursor.fetchall()
+        return rows
+    except Exception as ex:
+        print(ex)
+
+def get_df():
+    plat = {'Platform':['Netflix', 'Prime video', 'HBO', 'Disney+','BBC One', 'YouTube','NBC','FOX','Discovery','MTV']}
+    df = pd.DataFrame(plat)
+    for index, row in df.iterrows():
+        x = get(row['Platform'])
+        for i in x:
+            df.loc[index, f'{i[0]}'] = i[1]
+    return df
+def histo(df,col_chosen):
+    fig = px.histogram(df, x='Platform', y=col_chosen)
+    return fig

@@ -1,33 +1,137 @@
-/* Importa la fuente Kanit de Google Fonts */
+
+/* Importa la fuente Lilita One de Google Fonts */
 @font-face {
-    font-family: 'Kanit';
-    src: url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-    /* Opcionalmente, puedes especificar otros atributos como 'font-weight' y 'font-style' si es necesario. */
+    font-family: 'Lilita One';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/lilitaone/v10/i7dPIFZ9Zz-WBtRtedDbUEZ2RFq7AwU.ttf') format('truetype');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/lilitaone/v10/i7dPIFZ9Zz-WBtRtedDbUEZ2RFq7AwU.ttf') format('truetype');
 }
 
-/* Estilo para el título con la fuente personalizada Kanit */
+/* Importa la fuente Nunito de Google Fonts */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/nunito/v16/XRXV3I6Li01BKofINeaB.woff2') format('woff2');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/nunito/v16/XRXW3I6Li01BKofAjsOUYevN.ttf') format('truetype');
+}
+
+/* Importa la fuente Caprasimo de Google Fonts */
+@font-face {
+    font-family: 'Caprasimo';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/caprasimo/v1/pxiKyp0ihIEF2hsYHpT2Gw.woff2') format('woff2');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/caprasimo/v1/pxiNyp0ihIEF2hsYHpT2Gw.ttf') format('truetype');
+}
+
+/* Importa la fuente Fredoka de Google Fonts */
+@font-face {
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/fredokaone/v8/k3kUo8kEI-tA1RRcTZGmTmHB.ttf') format('truetype');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/fredokaone/v8/k3kTo8kEI-tA1RRcTZGmTmHxLMU.ttf') format('truetype');
+}
+
+/* Importa la fuente Quicksand de Google Fonts */
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/quicksand/v28/6xKtdSZaM9iE8KbpRA_hJ1Jl.ttf') format('truetype');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/quicksand/v28/6xKvdSZaM9iE8KbpRA_RVZ0zfC6S.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Kanit';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/kanit/v9/nKKZ-Go6G5tXcr72GwU.ttf') format('truetype');
+    font-weight: bold;
+    src: url('https://fonts.gstatic.com/s/kanit/v9/nKKX-Go6G5tXcraQI41I.ttf') format('truetype');
+}
+
+/* Estilo para todos los elementos con fuentes personalizadas */
 .custom-font {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Estilo para un elemento con la fuente personalizada Kanit */
+.custom-font-kanit {
     font-family: 'Kanit', sans-serif;
+}
+
+
+/* Estilo para el título con la fuente personalizada Lilita One */
+.custom-font-lilita {
+    font-family: 'Lilita One', sans-serif;
     font-size: 24px;
     color: #691616;
 }
 
-/* Estilo para el párrafo con la fuente personalizada Kanit */
-.custom-paragraph {
-    font-family: 'Kanit', sans-serif;
-    font-size: 16px;
-    color: #666;
+/* Estilo para el párrafo con la fuente personalizada Nunito */
+.custom-paragraph-nunito {
+    font-family: 'Nunito', sans-serif;
 }
 
-/* Estilo para un enlace con la fuente personalizada Kanit */
-.custom-link {
-    font-family: 'Kanit', sans-serif;
-    font-size: 14px;
+/* Estilo para un enlace con la fuente personalizada Caprasimo */
+.custom-link-caprasimo {
+    font-family: 'Caprasimo', sans-serif;
     color: #0077CC;
     text-decoration: none; /* Quita la subraya enlaces */
 }
 
 /* Estilo para un enlace al pasar el ratón sobre él */
-.custom-link:hover {
+.custom-link-caprasimo:hover {
     color: #005599;
+}
+
+/* Estilo para un botón con la fuente personalizada Fredoka */
+.custom-button-fredoka {
+    font-family: 'Fredoka', sans-serif;
+    color: #fff;
+    background-color: #0077CC;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Estilo para un botón al pasar el ratón sobre él */
+.custom-button-fredoka:hover {
+    background-color: #005599;
+}
+
+/* Estilo para un input con la fuente personalizada Quicksand */
+.custom-input-quicksand {
+    font-family: 'Quicksand', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Comentario para usar las fuentes personalizadas */
+/* Para usar la fuente Lilita One en un título, añade la clase 'custom-font-lilita' al elemento */
+/* Para usar la fuente Nunito en un párrafo, añade la clase 'custom-paragraph-nunito' al elemento */
+/* Para usar la fuente Caprasimo en un enlace, añade la clase 'custom-link-caprasimo' al elemento */
+/* Para usar la fuente Fredoka en un botón, añade la clase 'custom-button-fredoka' al elemento */
+/* Para usar la fuente Quicksand en un input, añade la clase 'custom-input-quicksand' al elemento */
+/* Importa la fuente Kanit de Google Fonts */
+
+body {
+    background-color: #3C3D3E;
+}
+
+/* Elimina el borde alrededor de todos los elementos de texto */
+* {
+    outline: none;
 }

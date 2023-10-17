@@ -1,0 +1,7 @@
+dash
+pandas
+pyodbc
+plotlib
+pycountry
+iso-639
+iso639-lang
